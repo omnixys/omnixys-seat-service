@@ -20,12 +20,12 @@
 name: Docker Build & Push – Omnixys
 
 on:
-  # push:
-  #   branches:
-  #     - main
-  workflow_run:
-    workflows: ['Continuous Integration – Omnixys']
-    types: [completed]
+  push:
+    branches:
+      - main
+  # workflow_run:
+  #   workflows: ['Continuous Integration – Omnixys']
+  #   types: [completed]
 
   workflow_dispatch:
 
@@ -129,6 +129,8 @@ jobs:
             APP_VERSION=${{ env.CURRENT_VERSION }}
             APP_NAME=${{ secrets.SERVICE }}
             NODE_VERSION=${{ matrix.node-version }}
+            DATABASE_URL=${{ env.DATABASE_URL }}
+            SHADOW_DATABASE_URL=${{ env.SHADOW_DATABASE_URL }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
 
@@ -193,6 +195,8 @@ jobs:
             APP_VERSION=${{ env.CURRENT_VERSION }}
             APP_NAME=${{ secrets.SERVICE }}
             NODE_VERSION=${{ matrix.node-version }}
+            DATABASE_URL=${{ env.DATABASE_URL }}
+            SHADOW_DATABASE_URL=${{ env.SHADOW_DATABASE_URL }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
 
