@@ -1,0 +1,74 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
+import { LoggerPlusService } from '../../logger/logger-plus.service.js';
+import { PrismaService } from '../../prisma/prisma.service.js';
+import { TableMapper } from '../models/mappers/table.mapper.js';
+import { Injectable, NotFoundException } from '@nestjs/common';
+
+@Injectable()
+export class TableReadService {
+  private readonly logger;
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly loggerService: LoggerPlusService,
+  ) {
+    this.logger = this.loggerService.getLogger(TableReadService.name);
+  }
+
+  /** Throws if table does not exist */
+  async ensureTable(tableId: string) {
+    this.logger.debug('ensureTable');
+    const table = await this.prisma.table.findUnique({
+      where: { id: tableId },
+    });
+    if (!table) {
+      throw new NotFoundException('Table not found.');
+    }
+    return table;
+  }
+
+  // ─────────────────────────────────────────────
+  // EVENT-LEVEL QUERIES
+  // ─────────────────────────────────────────────
+
+  /**
+   * Returns all tables for an event.
+   */
+  async getEventTables(eventId: string) {
+    const tables = await this.prisma.table.findMany({
+      where: { eventId },
+      orderBy: { order: 'asc' },
+      include: { seats: true },
+    });
+
+    return TableMapper.toPayloadList(tables);
+  }
+
+  // ─────────────────────────────────────────────
+  // TABLE QUERIES
+  // ─────────────────────────────────────────────
+
+  async getTableById(id: string) {
+    const table = await this.prisma.table.findUnique({
+      where: { id },
+      include: { seats: true },
+    });
+
+    if (!table) {
+      throw new Error('getTableById: Error Table!');
+    }
+
+    return TableMapper.toPayload(table);
+  }
+
+  async getTablesBySection(sectionId: string) {
+    const tables = await this.prisma.table.findMany({
+      where: { sectionId },
+      include: { seats: true },
+      orderBy: { order: 'asc' },
+    });
+
+    return TableMapper.toPayloadList(tables);
+  }
+}

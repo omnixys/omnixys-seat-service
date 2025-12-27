@@ -1,0 +1,51 @@
+import { GuestEventSeatInput } from '../models/inputs/guest-event-seat.input.js';
+import { SeatAssignmentLogPayload } from '../models/payloads/seat-assignment-log.payload.js';
+import { SeatPayload } from '../models/payloads/seat.payload.js';
+import { SeatReadService } from '../services/seat-read.service.js';
+import { Args, ID, Query, Resolver } from '@nestjs/graphql';
+
+@Resolver()
+export class SeatQueryResolver {
+  constructor(private readonly read: SeatReadService) {}
+
+  @Query(() => [SeatPayload])
+  async seatsBySection(
+    @Args('sectionId', { type: () => ID }) sectionId: string,
+  ): Promise<SeatPayload[]> {
+    return this.read.getSeatsBySection(sectionId);
+  }
+
+  @Query(() => [SeatPayload])
+  async seatsByTable(
+    @Args('tableId', { type: () => ID }) tableId: string,
+  ): Promise<SeatPayload[]> {
+    return this.read.getSeatsByTable(tableId);
+  }
+
+  @Query(() => SeatPayload, { nullable: true })
+  async seat(@Args('id', { type: () => ID }) id: string): Promise<SeatPayload> {
+    return this.read.getSeatById(id);
+  }
+
+  @Query(() => [SeatAssignmentLogPayload])
+  async seatAssignmentLogs(
+    @Args('eventId') eventId: string,
+  ): Promise<SeatAssignmentLogPayload[]> {
+    return this.read.getSeatAssignmentLogs(eventId);
+  }
+
+  @Query(() => [SeatPayload])
+  async seats(
+    @Args('eventId', { type: () => ID }) eventId: string,
+  ): Promise<SeatPayload[]> {
+    return this.read.getSeatsByEvent(eventId);
+  }
+
+  @Query(() => SeatPayload)
+  async getSeatByGuestAndEvent(
+    @Args('input', { type: () => GuestEventSeatInput })
+    input: GuestEventSeatInput,
+  ): Promise<SeatPayload> {
+    return this.read.getSeatByEventAndGuest(input);
+  }
+}
