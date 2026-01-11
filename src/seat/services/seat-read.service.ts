@@ -143,4 +143,12 @@ export class SeatReadService {
 
     return SeatMapper.toPayload(seat);
   }
+
+  async getSeatsByIds(seatIds: string[]) {
+    const seats = await this.prisma.seat.findMany({
+      where: { id: { in: seatIds } },
+    });
+
+    return SeatMapper.toPayloadList(seats);
+  }
 }

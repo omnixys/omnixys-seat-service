@@ -41,6 +41,13 @@ export class SeatQueryResolver {
     return this.read.getSeatsByEvent(eventId);
   }
 
+  @Query(() => [SeatPayload])
+  async getSeatList(
+    @Args('seatIds', { type: () => [ID] }) seatIds: string[],
+  ): Promise<SeatPayload[]> {
+    return this.read.getSeatsByIds(seatIds);
+  }
+
   @Query(() => SeatPayload)
   async getSeatByGuestAndEvent(
     @Args('input', { type: () => GuestEventSeatInput })

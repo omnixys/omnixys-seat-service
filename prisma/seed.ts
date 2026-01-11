@@ -30,7 +30,7 @@ const prisma = new PrismaClient({ adapter });
    CONFIG
 =========================================================================== */
 
-const EVENT_ID = 'cmjzoow54000nhmijxkg2fb7h';
+const EVENT_ID = 'cmk93ux98000nq00663i31s8h';
 
 const SECTIONS = 6;
 const TABLES_PER_SECTION = 5;
