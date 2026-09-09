@@ -17,6 +17,8 @@ export class TableMapper {
 
       x: table.x,
       y: table.y,
+      width: n2u(table.width),
+      height: n2u(table.height),
 
       rotation: n2u(table.rotation),
       meta: table.meta,

@@ -146,7 +146,7 @@ export class LayoutMutationResolver {
     return this.layoutWrite.moveSeat(input, user.id);
   }
 
-  @Mutation(() => SeatPayload)
+  @Mutation(() => SectionPayload)
   @UseGuards(CookieAuthGuard)
   async moveSection(
     @Args('input') input: MoveSectionInput,
@@ -155,7 +155,7 @@ export class LayoutMutationResolver {
     return this.layoutWrite.moveSection(input, user.id);
   }
 
-  @Mutation(() => SeatPayload)
+  @Mutation(() => TablePayload)
   @UseGuards(CookieAuthGuard)
   async moveTable(
     @Args('input') input: MoveTableInput,
