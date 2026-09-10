@@ -22,6 +22,7 @@ import compress from '@fastify/compress';
 import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
+import multipart from '@fastify/multipart';
 import rateLimit from '@fastify/rate-limit';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -115,6 +116,15 @@ async function bootstrap(): Promise<void> {
    * Erlaubt Frontend-Anwendungen (z. B. Next.js) Zugriff auf die API.
    */
   await app.register(cors, corsOptions);
+  await app.register(multipart, {
+    limits: {
+      fileSize: 20 * 1024 * 1024,
+      files: 2,
+      fields: 1,
+      parts: 3,
+      fieldSize: 1024,
+    },
+  });
 
   /**
    * Komprimiert API-Antworten automatisch.

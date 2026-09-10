@@ -15,6 +15,8 @@
  * For more information, visit <https://www.gnu.org/licenses/>.
  */
 
+import { corsOriginAllowlist } from './cors-origins.js';
+import { env } from './env.js';
 import type { FastifyCorsOptions } from '@fastify/cors';
 
 /**
@@ -51,10 +53,7 @@ export const corsOptions: FastifyCorsOptions = {
    * @remarks
    * - Enthält lokale Entwicklungs-Frontends und ggf. Tools wie Apollo Studio.
    */
-  origin: [
-    'http://localhost:3000', // lokales Next.js-Frontend
-    'https://studio.apollographql.com', // GraphQL Playground / Apollo Studio
-  ],
+  origin: corsOriginAllowlist(env.CHECKPOINT_ORIGIN),
 
   // ======================================================
   // ⚙️ HTTP-Methoden

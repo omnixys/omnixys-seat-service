@@ -22,7 +22,7 @@ src/adapter, admin, analytics, config, core, event-auth, handlers, layout, prism
 
 - Database: PostgreSQL via Prisma (prisma/schema.prisma)
 - Migrations: Prisma Migrate (prisma:migrate / generate / validate)
-- API: GraphQL (NestJS Apollo Federation)
+- API: GraphQL (NestJS Apollo Federation); bounded multipart REST source analysis at `POST /layout-import/:eventId/analyze`
 - Messaging: Kafka (kafkajs + @omnixys/kafka-ts)
 
 ## Shared Packages
@@ -89,6 +89,8 @@ node --test __tests__/unit/*.test.mjs; Jest e2e
 ## Repository-Specific Rules
 
 Concurrency-sensitive seat availability; tenant isolation mandatory.
+
+Seat-layout import sources are request-local. `src/layout-import` validates original images/PDFs and a prepared PNG in a terminable worker before deterministic recognition; it never writes sources or proposals to storage or the database. Authorize the REST path event explicitly through `EventPermissionResolver` with `ManageSeats`: the shared GraphQL event extractor does not use REST path parameters. Keep upload bytes, raster dimensions, proposal work, concurrency and deadlines bounded. Run the compiled import transport and recognition tests under `__tests__/unit` when changing this boundary. The transport suite includes an infrastructure-free Nest/Fastify multipart boundary with mocked authentication and event-access projections; it does not replace a deployed authentication/persistence E2E test.
 
 ## Development Skill
 

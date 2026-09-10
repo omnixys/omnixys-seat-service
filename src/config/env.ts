@@ -15,6 +15,7 @@
  * For more information, visit <https://www.gnu.org/licenses/>.
  */
 
+import { parseCheckpointOrigin } from './cors-origins.js';
 import 'dotenv/config';
 import process from 'node:process';
 
@@ -58,6 +59,9 @@ export const env = {
   NODE_ENV: getEnv('NODE_ENV', 'development'),
   PORT: getEnv('PORT', '4000', { transform: toNumber }),
   SERVICE: getEnv('SERVICE', 'user'),
+  CHECKPOINT_ORIGIN: getEnv('CHECKPOINT_ORIGIN', '', {
+    transform: parseCheckpointOrigin,
+  }),
   TRUSTED_PROXY_ADDRESSES: getEnv('TRUSTED_PROXY_ADDRESSES', ''),
 
   SCHEMA_TARGET: getEnv('SCHEMA_TARGET', 'true'),

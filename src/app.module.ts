@@ -21,6 +21,7 @@ import { BannerService } from './config/banner.service.js';
 import { env } from './config/env.js';
 import { HandlerModule } from './handlers/handler.module.js';
 import { HealthModule } from './health/health.module.js';
+import { LayoutImportModule } from './layout-import/layout-import.module.js';
 import { LayoutModule } from './layout/layout.module.js';
 import { SeatModule } from './seat/seat.module.js';
 
@@ -169,6 +170,7 @@ const {
     TableModule,
     SectionModule,
     LayoutModule,
+    LayoutImportModule,
     HandlerModule,
     HealthModule,
   ],

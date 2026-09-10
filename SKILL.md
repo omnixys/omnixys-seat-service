@@ -13,7 +13,7 @@
 - Description: Omnixys Seat Service – seats, sections, tables, layout, event-auth, analytics.
 - Architecture: src/adapter, admin, analytics, config, core, event-auth, handlers, layout, prisma, seat, section, security, table, utils
 - Database: PostgreSQL via Prisma (prisma/schema.prisma); Migrations: Prisma Migrate (prisma:migrate / generate / validate)
-- API: GraphQL (NestJS Apollo Federation)
+- API: GraphQL (NestJS Apollo Federation); multipart REST source analysis (`src/layout-import`)
 - Messaging: Kafka (kafkajs + @omnixys/kafka-ts)
 - Tests: node --test __tests__/unit/*.test.mjs; Jest e2e
 
@@ -25,6 +25,7 @@
 - Identify the affected bounded context within `src/adapter, admin, analytics, config, core, event-auth, handlers, layout, prisma, seat, section, security, table, utils`.
 - Inspect consumers of the GraphQL operations and Kafka events you may touch.
 - Never weaken authentication or authorization to make a test pass.
+- For layout import, authorize the explicit REST path event with `ManageSeats`; active-event headers/cookies must not authorize a different target. Source bytes and recognition drafts remain temporary and never enter persistence.
 
 ### 2. Implement
 
@@ -38,6 +39,7 @@
 - Unit tests exercise isolated business behavior.
 - Integration tests cover repository/Prisma, GraphQL, Kafka, and auth boundaries.
 - Cover tenant-isolation and error-contract cases when the code path touches them.
+- Import tests include bounded streams, real image/PDF decoding, worker cancellation/deadlines/concurrency and an infrastructure-free Nest/Fastify multipart boundary. Build first, then run `node --test __tests__/unit/layout-*.test.mjs`; authentication/projection adapters in the boundary test are mocked, so report deployed E2E separately.
 
 ### 4. Validate
 

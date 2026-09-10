@@ -68,6 +68,14 @@ Layout versioning is already implemented through `LayoutVersion`, forward/invers
 
 The API provides section, table, seat, and full-layout queries; assignment history and event statistics; CRUD operations; assignment mutations; layout generation, movement, duplication, versioning, undo, and redo.
 
+### HTTP layout source analysis
+
+`POST /layout-import/:eventId/analyze` accepts multipart `metadata` JSON, `originalSource`, and `preparedImage` PNG. Cookie authentication and `ManageSeats` for the explicit path event are required. Metadata contains `kind` (`IMAGE`, `PDF`, or `CAMERA`), prepared `width`/`height`, and a one-based `pageNumber` for PDF sources.
+
+The endpoint returns temporary geometry proposals for user review; it never saves source files or seat entities. Limits are 20 MiB/24 megapixels for original images, 20 MiB/100 pages for PDF, and 8 MiB/2048 pixels longest edge for the prepared PNG. Encrypted PDFs are unsupported. Analysis uses a terminable worker, a 20-second upload-and-analysis deadline, and two concurrent requests without a queue.
+
+For a deployed Checkpoint frontend on a separate origin, set optional `CHECKPOINT_ORIGIN` to its exact browser origin, for example `https://checkpoint.example.com`. Only one HTTP(S) origin is accepted; credentials, paths, queries, fragments, wildcards, and comma-separated lists fail configuration validation. `http://localhost:3000` and `https://studio.apollographql.com` remain allowed. Requests use credentials; other origins receive no CORS access grant. Configure Checkpoint's `NEXT_PUBLIC_SEAT_API` with this service's base URL. No remote configuration is changed automatically.
+
 ### HTTP health
 
 - `GET /health/liveness` checks the process.
