@@ -3,6 +3,16 @@
 All notable changes in this project will be documented in this file.
 
 
+## [4.1.0](https://github.com/omnixys/seat-service/compare/v4.0.0...v4.1.0) (2026-09-10)
+
+### Layout
+
+* **Layout:** preserve table dimensions and move payload types ([](https://github.com/omnixys/seat-service/commit/d41cb236f1351cf5471b2f99c40f5afef287de1c))
+
+### Layout-import
+
+* **Layout-import:** analyze layout sources with bounded workers ([](https://github.com/omnixys/seat-service/commit/40cc3f72925bbbf525fc57eb0c32f7eac4efb75a))
+
 ## [4.0.0](https://github.com/omnixys/seat-service/compare/v3.4.5...v4.0.0) (2026-09-05)
 
 ### Deps
